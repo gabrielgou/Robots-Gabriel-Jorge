@@ -14,7 +14,7 @@ Contatos: jorge.ed.ribeiro00@gmail.com & gabriel.gouveia@live.com;*/
 //===============variaveis globais===============
 char joy;
 char map[MAXLINS][MAXCOLS];
-int sair=0, o=0;
+int sair=0, o=0, energy=1;
 struct gamer{
         int x, y;
 };
@@ -27,7 +27,7 @@ void move()//in Progress*
 {
     fflush(stdin);
     scanf("%s", &joy);
-
+    
     switch(joy)
     {
         case 'q'://Cima e esquerda (Diagonal)
@@ -74,20 +74,31 @@ void move()//in Progress*
             player.y++;
             break;
         }
-        case 't'://teleporte seguro se possivel
+        case 't'://teleporte aleatorio
         {
             player.x=rand()%MAXLINS;
             player.y=rand()%MAXCOLS;
             break;
         }
-        /*if(joy=='g')//teleporte em segurança
+        case 's':
         {
-
+            printf("\nFicou parado\n");
+            break;
         }
-        if(joy=='b')//teleporte para qualquer lugar
+        case 'g'://teleporte em segurança
         {
-
-        }*/
+            if(energy==1)
+            {
+                energy=0;
+                printf("\nEscolha uma linha: ");
+                scanf("%d", &player.x);
+                printf("Escolha uma coluna: ");
+                scanf("%d", &player.y);
+                player.x--;
+                player.y--;
+            }
+           
+        }        
         default:
         {
             printf("\nComando Invalido\n");
@@ -106,6 +117,7 @@ void move()//in Progress*
 
     void print_map() //In progress*
     {
+        system("clear");
         int i,j;
         for(i=0;i<MAXLINS;i++)
         {
@@ -140,7 +152,7 @@ void move()//in Progress*
             }
             
         }
-        system("clear");
+        //system("clear");
         for(i=0;i<MAXLINS;i++)
         {
             printf("\t\t\t\t\t");
@@ -151,7 +163,9 @@ void move()//in Progress*
             printf("\n");
         }
         printf("\nJoystick:\n\t\tq w e\n\t\ta . d\n\t\tz x c\n");
-        printf("\nt->teletransporte\n");
+        printf("\ns->ficar parado");
+        printf("\nt->teletransporte aleatorio\n");
+        printf("g->teletransporte seguro\n");
         printf("Comando: ");
 
         

@@ -16,11 +16,15 @@ Contatos: jorge.ed.ribeiro00@gmail.com & gabriel.gouveia@live.com;*/
 /*===============variaveis globais===============*/
 char joy;
 char map[MAXLINS][MAXCOLS];
-int loose=0, o=0, energy=1, quit=0, value_r=1;
+int loose=0, o=0, energy=1, quit=0, value_r=1, n, win=0, temp_life;
 struct gamer{
     int x, y;
+    int alive;
+
 };
 struct gamer player;
+struct gamer robot_slow[100];
+struct gamer robot_fast[100];
 
 
 void help()/*Manual do jogo*/
@@ -140,7 +144,7 @@ void move()/*in Progress*/
 
 }
 
-void print_map() /*In progress*/
+void print_map(int eni) /*In progress*/
 {
     system("clear");
     int i,j;
@@ -149,34 +153,52 @@ void print_map() /*In progress*/
         for(j=0;j<MAXCOLS;j++)
         {
 
-            if(i==player.x && j==player.y)
-            {
-                if(o==0)
+            
+                for(n=0;n<(eni/2);n++)
                 {
-                    map[i][j]='O';
-                    o=1;
-                }
-                else
-                {
-                    map[i][j]='o';
-                    o=0;
+                    if(i==player.x && j==player.y && player.x)
+                    {
+                        if(o==0)
+                        {
+                            map[i][j]='O';
+
+                            o=1;
+                        }
+                        else
+                        {
+                            map[i][j]='o';
+                            o=0;
+                        }
+                        break;                
+                    }
+                    else  if(i==robot_slow[n].x && j==robot_slow[n].y && robot_slow[n].alive==1)
+                    {
+                        map[i][j]='r';
+                        break; 
+                    }
+                    else if(i==robot_fast[n].x  && j==robot_fast[n].y && robot_fast[n].alive==1)
+                    {
+                        map[i][j]='R';
+                        break;
+                    }
+                    else if(i==robot_slow[n].x && j==robot_slow[n].y && robot_slow[n].alive==0)
+                    {
+                        map[i][j]='L';
+        
+                    }
+                    else if(player.x==robot_slow[n].x && player.y==robot_slow[n].y && robot_slow[n].alive==1)
+                    {
+                        map[i][j]='X';
+        
+                    }
+                    else
+                        map[i][j]='.';
+                        
                 }
 
-            }
-            /*else if(i==robots[i].x && j==robots[i].y)
-            {
-                map[i][j]='r';
-            }
-            else if(i==fast_robots.x && j==fast_robots.y)
-              {
-              map[i][j]='R';
-              }*/
-
-            else
-                map[i][j]='.';
+            
 
         }
-
     }
     /*system("clear");*/
     for(i=0;i<MAXLINS;i++)
@@ -194,6 +216,26 @@ void print_map() /*In progress*/
     printf("g->teletransporte seguro\n");
     printf("h->ajuda\n");
     printf("Comando: ");
+}
+
+void move_enemies(int mv_eni)
+{
+    int a;
+    for(a=0;a<(mv_eni/2);a++)
+    {
+        if(robot_slow[a].alive==1)
+        {
+            if(player.x>robot_slow[a].x)
+                robot_slow[a].x++;
+            else if(player.x<robot_slow[a].x)
+                robot_slow[a].x--;
+
+            if(player.y>robot_slow[a].y)
+                robot_slow[a].y++;
+            else if(player.y<robot_slow[a].y)
+                robot_slow[a].y--;
+        }
+    }
 
 
 }
@@ -202,19 +244,76 @@ int main()
 {   
     srand(time(NULL));
 
-    //struct gamer robots[value_r];//registro do robo lento*/
+
+
+
     /* struct gamer fast_robots[value_fr];//registro do robo rapido*/
     player.x=rand()%MAXLINS;
     player.y=rand()%MAXCOLS; /*inicializa o player numa posição qualquer*/
+    int q=0;
     do
     {
-        
-        energy=1;
-        do /*loop onde vai rodar o programa principal*/
+        if(loose==1)
         {
-            print_map();
+            q=0;
+            loose=0;
+        }
+        q+=2;
+        energy=1;
+        int f;
+        win=q;
+        for(f=0;f<q/2;f++)
+        {
+            
+            robot_slow[f].x=rand()%MAXLINS;
+            robot_slow[f].y=rand()%MAXCOLS;
+            robot_slow[f].alive=1;
+            robot_fast[f].x=rand()%MAXLINS;
+            robot_fast[f].y=rand()%MAXCOLS;
+            robot_fast[f].alive=1;
+        }
+        do /*loop onde vai rodar o programa principal*/
+        {   
+            temp_life=0;
+            print_map(q);
             move();
-        }while(loose!=1);
+            move_enemies(q);
+            
+            for(f=0;f<(q/2);f++)
+            {
+                if(robot_slow[f].x==player.x && robot_slow[f].y==player.y && robot_slow[f].alive==1)
+                    loose=1;
+                int teste;    
+                for(teste=0;teste<q/2;teste++)
+                {
+                    if(robot_slow[f].x==robot_slow[teste].x && robot_slow[f].y==robot_slow[teste].y && f!=teste)
+                    {
+                        robot_slow[f].alive=0;
+                        robot_slow[teste].alive=0;
+                    }
+                    if(robot_slow[f].x==robot_fast[teste].x && robot_slow[f].y==robot_fast[teste].y)
+                    {
+                        robot_slow[f].alive=0;
+                        robot_fast[teste].alive=0;
+                    }
+                    if(robot_fast[f].x==robot_fast[teste].x && robot_fast[f].y==robot_fast[teste].y && f!=teste)
+                    {
+                        robot_fast[f].alive=0;
+                        robot_fast[teste].alive=0;
+                    }
+                }
+                temp_life+=robot_slow[f].alive+robot_fast[f].alive;
+
+            }
+            
+        }while(temp_life!=0 && loose!=1);
+        print_map(q);
+        if(loose==1)
+            printf("\nVocê perdeu\n");
+        else
+            printf("\nPassou de level!\n");
+        __fpurge(stdin);
+        getchar();
     }while(quit!=1);
 }
 

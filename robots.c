@@ -14,7 +14,7 @@ Contatos: jorge.ed.ribeiro00@gmail.com & gabriel.gouveia@live.com;*/
 //===============variaveis globais===============
 char joy;
 char map[MAXLINS][MAXCOLS];
-int sair=0, o=0, energy=1;
+int loose=0, o=0, energy=1, quit=0;
 struct gamer{
         int x, y;
 };
@@ -162,7 +162,7 @@ void move()//in Progress*
             }
             printf("\n");
         }
-        printf("\nJoystick:\n\t\tq w e\n\t\ta . d\n\t\tz x c\n");
+        printf("\nJoystick:\t\t\tEnergia: %d\n\t\tq w e\n\t\ta . d\n\t\tz x c\n", energy);
         printf("\ns->ficar parado");
         printf("\nt->teletransporte aleatorio\n");
         printf("g->teletransporte seguro\n");
@@ -179,11 +179,14 @@ void move()//in Progress*
 
         player.x=rand()%MAXLINS;
         player.y=rand()%MAXCOLS; //inicializa o player numa posição qualquer
-
-        do //loop onde vai rodar o programa principal*
+        do
         {
-            print_map();
-            move();
-        }while(sair!=1);
+            energy=1;
+            do //loop onde vai rodar o programa principal*
+            {
+                print_map();
+                move();
+            }while(loose!=1);
+        }while(quit!=1);
     }
 

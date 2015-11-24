@@ -16,7 +16,7 @@ Contatos: jorge.ed.ribeiro00@gmail.com & gabriel.gouveia@live.com;*/
 /*===============variaveis globais===============*/
 char joy;
 char map[MAXLINS][MAXCOLS];
-int loose=0, o=0, energy=1, quit=0, value_r=1, n, win=0, temp_life;
+int loose=0, o=0, energy=1, quit=0, value_r=1, n, win=0, temp_life, lvl=1;
 struct gamer{
     int x, y;
     int alive;
@@ -45,46 +45,112 @@ void move()/*in Progress*/
     {
         case 'q':/*Cima e esquerda (Diagonal)*/
             {
-                player.x--;
-                player.y--;
+                if(map[(player.x-1)][(player.y-1)]!='L')
+                {
+                    player.x--;
+                    player.y--;
+                }
+                else
+                {
+                    printf("\nComando invalido\n");
+                    __fpurge(stdin);
+                    getchar();
+                }
+
                 break;
             }
         case 'w':/*Cima*/
             {
-                player.x--;
+                if(map[(player.x-1)][(player.y)]!='L')
+                    player.x--;
+                else
+                {
+                    printf("\nComando invalido\n");
+                    __fpurge(stdin);
+                    getchar();
+                }
                 break;
             }
         case 'e':/*Cima e direita (Diagonal)*/
             {
-                player.x--;
-                player.y++;
+                if(map[(player.x-1)][(player.y+1)]!='L')
+                {
+                    player.x--;
+                    player.y++;
+                }
+                else
+                {
+                    printf("\nComando invalido\n");
+                    __fpurge(stdin);
+                    getchar();
+                }
                 break;
             }
         case 'a':/*esquerda*/
             {
-                player.y--;
+                if(map[(player.x)][(player.y-1)]!='L')
+                    player.y--;
+                else
+                {
+                    printf("\nComando invalido\n");
+                    __fpurge(stdin);
+                    getchar();
+
+                }
                 break;
             }
         case 'd':/*direita*/
             {
-                player.y++;
+                if(map[(player.x)][(player.y+1)]!='L')
+                    player.y++;
+                else
+                {
+                    printf("\nComando invalido\n");
+                    __fpurge(stdin);
+                    getchar();
+                }
                 break;
             }
         case 'z':/*Baixo e Esquerda (diagonal)*/
             {
-                player.x++;
-                player.y--;
+                if(map[(player.x+1)][(player.y-1)]!='L')
+                {
+                    player.x++;
+                    player.y--;
+                }
+                else
+                {
+                    printf("\nComando invalido\n");
+                    __fpurge(stdin);
+                    getchar();
+                }
                 break;
             }
         case 'x':/*Baixo*/
             {
-                player.x++;
+                if(map[(player.x+1)][(player.y)]!='L')
+                    player.x++;
+                else
+                {
+                    printf("\nComando invalido\n");
+                    __fpurge(stdin);
+                    getchar();
+                }
                 break;
             }
         case 'c':/*Baixo e Direita (Diagonal)*/
-            {
-                player.x++;
-                player.y++;
+            {   
+                if(map[(player.x+1)][(player.y+1)]!='L')
+                {
+                    player.x++;
+                    player.y++;
+                }
+                else
+                {
+                    printf("\nComando invalido\n");
+                    __fpurge(stdin);
+                    getchar();
+                }
                 break;
             }
         case 't':/*teleporte aleatorio*/
@@ -189,15 +255,11 @@ void print_map(int eni) /*In progress*/
                 else if(i==robot_fast[n].x && j==robot_fast[n].y && robot_fast[n].alive==0)
                     map[i][j]='L';
                 else if(player.x==robot_slow[n].x && player.y==robot_slow[n].y && robot_slow[n].alive==1)
-                {
                     map[i][j]='X';
-
-                }
+                else if(player.x==robot_fast[n].x && player.y==robot_fast[n].y && robot_fast[n].alive==1)
+                    map[i][j]='X';
                 else
-                {
                     map[i][j]='.';
-                    
-                }
 
             }
 
@@ -208,14 +270,23 @@ void print_map(int eni) /*In progress*/
     /*system("clear");*/
     for(i=0;i<MAXLINS;i++)
     {
-        printf("\t\t\t\t\t");
+        printf("\t\t\t\t\t%02d ",i+1);
         for(j=0;j<MAXCOLS;j++)
         {
             printf("%c ", map[i][j]);
         }
         printf("\n");
     }
-    printf("\nJoystick:\t\t\tEnergia: %d\n\t\tq w e\n\t\ta . d\n\t\tz x c\n", energy);
+    printf("\t\t\t\t\t   ");
+    for(i=0;i<MAXCOLS;i++)
+    {
+        if(i<9)
+            printf("%d ", i+1);
+        else
+            printf("%d",i+1);
+    }
+    printf("\n\n");
+    printf("\nJoystick:\t\t\tEnergia: %d\t\t\t\tLevel: %d\n\t\tq w e\n\t\ta . d\n\t\tz x c\n", energy, lvl);
     printf("\ns->ficar parado");
     printf("\nt->teletransporte aleatorio\n");
     printf("g->teletransporte seguro\n");
@@ -239,6 +310,23 @@ void move_enemies(int mv_eni)
                 robot_slow[a].y++;
             else if(player.y<robot_slow[a].y)
                 robot_slow[a].y--;
+        }
+        int b;
+        for(b=0;b<2;b++)
+        {
+            if(robot_fast[a].alive==1)
+            {
+                if(player.x>robot_fast[a].x)
+                    robot_fast[a].x++;
+                else if(player.x<robot_fast[a].x)
+                    robot_fast[a].x--;
+
+                if(player.y>robot_fast[a].y)
+                    robot_fast[a].y++;
+                else if(player.y<robot_fast[a].y)
+                    robot_fast[a].y--;
+
+            }
         }
     }
 
@@ -288,6 +376,9 @@ int main()
             {
                 if(robot_slow[f].x==player.x && robot_slow[f].y==player.y && robot_slow[f].alive==1)
                     loose=1;
+                if(robot_fast[f].x==player.x && robot_fast[f].y==player.y && robot_fast[f].alive==1)
+                    loose=1;
+
                 int teste;    
                 for(teste=0;teste<q/2;teste++)
                 {
@@ -314,9 +405,15 @@ int main()
         }while(temp_life!=0 && loose!=1);
         print_map(q);
         if(loose==1)
+        {
             printf("\nVocê perdeu\n");
+            lvl=1;
+        }
         else
+        {
             printf("\nPassou de level!\n");
+            lvl++;
+        }
         __fpurge(stdin);
         getchar();
     }while(quit!=1);

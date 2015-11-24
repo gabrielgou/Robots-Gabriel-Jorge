@@ -6,6 +6,8 @@ Contatos: jorge.ed.ribeiro00@gmail.com & gabriel.gouveia@live.com;*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
+
 
 /*===============Defines========================*/
 #define MAXLINS 16
@@ -26,13 +28,13 @@ void help()/*Manual do jogo*/
     printf("\n\nEste eh o jogo Robots, seu objetivo eh simples, destrua todos os robos.\nPara isso voce deve se movimentar pelo campo com sua inteligencia, a cada movimento todos os robos irao se mover uma casa na sua direcao, sobreviva e passe de nivel, boa sorte.\n\n");
     printf("Comandos:\n\n*Movimentacao*\nw: cima;\nx: baixo;\nd: direita;\na: esquerda;\ne: diagonal direita acima;\nq: diagonal esquerda acima;\nc: diagonal direita abaixo;\nz: diagonal esquerda abaixo;\ns: comando neutro, nao se mover;\n\n");
     printf("t: teleporte aleatorio, sera sorteado a posicao em que voce reaparecera (numero ilimitado de utilizacoes);\ng: teletransporte seguro, voce tem a opcao de escolher a posicao onde ira reaparecer, apenas confirme e siga as instrucoes (apenas um uso por energia, escolha com sabedoria);\nv: vaporizacao, uma explosao que destroi todos os robos nas casas adjacentes (apenas um uso por energia, nao desperdice, sua vida depende disso.\n\n");
-    printf("*Regras:\n1o: So se pode mover uma casa por vez e a cada movimentos todos os robos irao na sua direcao;\n2o: A unica forma de se matar um robo eh fazendo ele se chocar contra outro robo ou contra o lixo e, em ultimo caso, utilizando a vaporizacao;\n3o: Sempre que um robo eh destruido forma-se lixo ali, nem voce nem os outros robos podem mover o lixo ou subir nele (caso tente o movimento sera invalido, a jogada sera dada como feita, os robos irao na sua direcao e voce continuara no mesmo local);\n4o: Ha apenas uma energia em cada nivel e essa energia carrega a vaporizacao ou o transporte seguro. Essa energia nao pode ser acumulada de um nivel para o outro, ou seja, em todos os niveis voce tera que escolher se ussa ou nao um dos dois (isso, claro, se voce sobreviver ate la).");
+    printf("*Regras:\n1o: So se pode mover uma casa por vez e a cada movimentos todos os robos irao na sua direcao;\n2o: A unica forma de se matar um robo eh fazendo ele se chocar contra outro robo ou contra o lixo e, em ultimo caso, utilizando a vaporizacao;\n3o: Sempre que um robo eh destruido forma-se lixo ali, nem voce nem os outros robos podem mover o lixo ou subir nele (caso tente o movimento sera invalido, a jogada sera dada como feita, os robos irao na sua direcao e voce continuara no mesmo local);\n4o: Ha apenas uma energia em cada nivel e essa energia carrega a vaporizacao ou o transporte seguro. Essa energia nao pode ser acumulada de um nivel para o outro, ou seja, em todos os niveis voce tera que escolher se ussa ou nao um dos dois (isso, claro, se voce sobreviver ate la)\n.");
 }
 
 
 void move()/*in Progress*/
 {
-    fflush(stdin);
+    joy='\0';
     scanf("%s", &joy);
     
     switch(joy)
@@ -90,6 +92,8 @@ void move()/*in Progress*/
         case 's':
         {
             printf("\nFicou parado\n");
+            __fpurge(stdin);
+            getchar();
             break;
         }
         case 'g':/*teleporte em segurança*/
@@ -107,10 +111,18 @@ void move()/*in Progress*/
            
         }
         case 'h':/*manual do jogo*/
-            help()
+        {
+            help();
+            __fpurge(stdin);
+            getchar();
+            break;
+        }
         default:
         {
             printf("\nComando Invalido\n");
+            __fpurge(stdin);
+            getchar();
+            break;
         }
     }
         if(player.x<0)
@@ -175,6 +187,7 @@ void move()/*in Progress*/
         printf("\ns->ficar parado");
         printf("\nt->teletransporte aleatorio\n");
         printf("g->teletransporte seguro\n");
+        printf("h->ajuda\n");
         printf("Comando: ");
 
         

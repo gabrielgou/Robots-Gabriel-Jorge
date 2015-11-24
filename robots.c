@@ -7,11 +7,11 @@ Contatos: jorge.ed.ribeiro00@gmail.com & gabriel.gouveia@live.com;*/
 #include <stdlib.h>
 #include <time.h>
 
-//===============Defines========================
+/*===============Defines========================*/
 #define MAXLINS 16
 #define MAXCOLS 16
 
-//===============variaveis globais===============
+/*===============variaveis globais===============*/
 char joy;
 char map[MAXLINS][MAXCOLS];
 int loose=0, o=0, energy=1, quit=0;
@@ -21,60 +21,67 @@ struct gamer{
 struct gamer player;
 
 
+void help()/*Manual do jogo*/
+{
+    printf("\n\nEste eh o jogo Robots, seu objetivo eh simples, destrua todos os robos.\nPara isso voce deve se movimentar pelo campo com sua inteligencia, a cada movimento todos os robos irao se mover uma casa na sua direcao, sobreviva e passe de nivel, boa sorte.\n\n");
+    printf("Comandos:\n\n*Movimentacao*\nw: cima;\nx: baixo;\nd: direita;\na: esquerda;\ne: diagonal direita acima;\nq: diagonal esquerda acima;\nc: diagonal direita abaixo;\nz: diagonal esquerda abaixo;\ns: comando neutro, nao se mover;\n\n");
+    printf("t: teleporte aleatorio, sera sorteado a posicao em que voce reaparecera (numero ilimitado de utilizacoes);\ng: teletransporte seguro, voce tem a opcao de escolher a posicao onde ira reaparecer, apenas confirme e siga as instrucoes (apenas um uso por energia, escolha com sabedoria);\nv: vaporizacao, uma explosao que destroi todos os robos nas casas adjacentes (apenas um uso por energia, nao desperdice, sua vida depende disso.\n\n");
+    printf("*Regras:\n1o: So se pode mover uma casa por vez e a cada movimentos todos os robos irao na sua direcao;\n2o: A unica forma de se matar um robo eh fazendo ele se chocar contra outro robo ou contra o lixo e, em ultimo caso, utilizando a vaporizacao;\n3o: Sempre que um robo eh destruido forma-se lixo ali, nem voce nem os outros robos podem mover o lixo ou subir nele (caso tente o movimento sera invalido, a jogada sera dada como feita, os robos irao na sua direcao e voce continuara no mesmo local);\n4o: Ha apenas uma energia em cada nivel e essa energia carrega a vaporizacao ou o transporte seguro. Essa energia nao pode ser acumulada de um nivel para o outro, ou seja, em todos os niveis voce tera que escolher se ussa ou nao um dos dois (isso, claro, se voce sobreviver ate la).");
+}
 
 
-void move()//in Progress*
+void move()/*in Progress*/
 {
     fflush(stdin);
     scanf("%s", &joy);
     
     switch(joy)
     {
-        case 'q'://Cima e esquerda (Diagonal)
+        case 'q':/*Cima e esquerda (Diagonal)*/
         {
             player.x--;
             player.y--;
             break;
         }
-        case 'w'://Cima
+        case 'w':/*Cima*/
         {
             player.x--;
             break;
         }
-        case 'e'://Cima e direita (Diagonal)
+        case 'e':/*Cima e direita (Diagonal)*/
         {
             player.x--;
             player.y++;
             break;
         }
-        case 'a'://esquerda
+        case 'a':/*esquerda*/
         {
             player.y--;
             break;
         }
-        case 'd'://direita
+        case 'd':/*direita*/
         {
             player.y++;
             break;
         }
-        case 'z'://Baixo e Esquerda (diagonal)
+        case 'z':/*Baixo e Esquerda (diagonal)*/
         {
             player.x++;
             player.y--;
             break;
         }
-        case 'x'://Baixo
+        case 'x':/*Baixo*/
         {
             player.x++;
             break;
         }
-        case 'c'://Baixo e Direita (Diagonal)
+        case 'c':/*Baixo e Direita (Diagonal)*/
         {
             player.x++;
             player.y++;
             break;
         }
-        case 't'://teleporte aleatorio
+        case 't':/*teleporte aleatorio*/
         {
             player.x=rand()%MAXLINS;
             player.y=rand()%MAXCOLS;
@@ -85,7 +92,7 @@ void move()//in Progress*
             printf("\nFicou parado\n");
             break;
         }
-        case 'g'://teleporte em segurança
+        case 'g':/*teleporte em segurança*/
         {
             if(energy==1)
             {
@@ -98,7 +105,9 @@ void move()//in Progress*
                 player.y--;
             }
            
-        }        
+        }
+        case 'h':/*manual do jogo*/
+            help()
         default:
         {
             printf("\nComando Invalido\n");
@@ -115,7 +124,7 @@ void move()//in Progress*
         
     }
 
-    void print_map() //In progress*
+    void print_map() /*In progress*/
     {
         system("clear");
         int i,j;
@@ -152,7 +161,7 @@ void move()//in Progress*
             }
             
         }
-        //system("clear");
+        /*system("clear");*/
         for(i=0;i<MAXLINS;i++)
         {
             printf("\t\t\t\t\t");
@@ -174,15 +183,15 @@ void move()//in Progress*
     int main()
     {   
         srand(time(NULL));
-       // struct gamer robots[value_r];//registro do robo lento
-       // struct gamer fast_robots[value_fr];//registro do robo rapido
+       /* struct gamer robots[value_r];//registro do robo lento*/
+       /* struct gamer fast_robots[value_fr];//registro do robo rapido*/
 
         player.x=rand()%MAXLINS;
-        player.y=rand()%MAXCOLS; //inicializa o player numa posição qualquer
+        player.y=rand()%MAXCOLS; /*inicializa o player numa posição qualquer*/
         do
         {
             energy=1;
-            do //loop onde vai rodar o programa principal*
+            do /*loop onde vai rodar o programa principal*/
             {
                 print_map();
                 move();

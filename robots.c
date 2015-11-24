@@ -387,7 +387,7 @@ void move_enemies(int mv_eni)
 int main()
 {   
     srand(time(NULL));
-    int temp_score=0;
+    int temp_score=0, first_kill=1;
 
 
     energy=0;
@@ -458,7 +458,13 @@ int main()
             }
 
             if(temp_life!=temp_score && temp_score!=0)
-                score++;
+                if(first_kill==1)
+                {
+                    score+=2;
+                    first_kill=0;
+                }
+                else
+                    score++;
             temp_score=temp_life;
 
 
@@ -476,6 +482,7 @@ int main()
         {
             printf("\nPassou de level!\n");
             lvl++;
+            first_kill=1;
         }
         __fpurge(stdin);
         getchar();

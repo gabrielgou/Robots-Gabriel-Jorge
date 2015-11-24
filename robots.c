@@ -16,9 +16,9 @@ Contatos: jorge.ed.ribeiro00@gmail.com & gabriel.gouveia@live.com;*/
 /*===============variaveis globais===============*/
 char joy;
 char map[MAXLINS][MAXCOLS];
-int loose=0, o=0, energy=1, quit=0;
+int loose=0, o=0, energy=1, quit=0, value_r=1;
 struct gamer{
-        int x, y;
+    int x, y;
 };
 struct gamer player;
 
@@ -36,179 +36,185 @@ void move()/*in Progress*/
 {
     joy='\0';
     scanf("%s", &joy);
-    
+
     switch(joy)
     {
         case 'q':/*Cima e esquerda (Diagonal)*/
-        {
-            player.x--;
-            player.y--;
-            break;
-        }
-        case 'w':/*Cima*/
-        {
-            player.x--;
-            break;
-        }
-        case 'e':/*Cima e direita (Diagonal)*/
-        {
-            player.x--;
-            player.y++;
-            break;
-        }
-        case 'a':/*esquerda*/
-        {
-            player.y--;
-            break;
-        }
-        case 'd':/*direita*/
-        {
-            player.y++;
-            break;
-        }
-        case 'z':/*Baixo e Esquerda (diagonal)*/
-        {
-            player.x++;
-            player.y--;
-            break;
-        }
-        case 'x':/*Baixo*/
-        {
-            player.x++;
-            break;
-        }
-        case 'c':/*Baixo e Direita (Diagonal)*/
-        {
-            player.x++;
-            player.y++;
-            break;
-        }
-        case 't':/*teleporte aleatorio*/
-        {
-            player.x=rand()%MAXLINS;
-            player.y=rand()%MAXCOLS;
-            break;
-        }
-        case 's':
-        {
-            printf("\nFicou parado\n");
-            __fpurge(stdin);
-            getchar();
-            break;
-        }
-        case 'g':/*teleporte em segurança*/
-        {
-            if(energy==1)
             {
-                energy=0;
-                printf("\nEscolha uma linha: ");
-                scanf("%d", &player.x);
-                printf("Escolha uma coluna: ");
-                scanf("%d", &player.y);
                 player.x--;
                 player.y--;
+                break;
             }
-           
-        }
-        case 'h':/*manual do jogo*/
-        {
-            help();
-            __fpurge(stdin);
-            getchar();
-            break;
-        }
-        default:
-        {
-            printf("\nComando Invalido\n");
-            __fpurge(stdin);
-            getchar();
-            break;
-        }
-    }
-        if(player.x<0)
-            player.x=0;
-        if(player.x>15)
-            player.x=15;
-        if(player.y<0)
-            player.y=0;
-        if(player.y>15)
-            player.y=15;
-        
-    }
-
-    void print_map() /*In progress*/
-    {
-        system("clear");
-        int i,j;
-        for(i=0;i<MAXLINS;i++)
-        {
-            for(j=0;j<MAXCOLS;j++)
+        case 'w':/*Cima*/
             {
-                
-                if(i==player.x && j==player.y)
+                player.x--;
+                break;
+            }
+        case 'e':/*Cima e direita (Diagonal)*/
+            {
+                player.x--;
+                player.y++;
+                break;
+            }
+        case 'a':/*esquerda*/
+            {
+                player.y--;
+                break;
+            }
+        case 'd':/*direita*/
+            {
+                player.y++;
+                break;
+            }
+        case 'z':/*Baixo e Esquerda (diagonal)*/
+            {
+                player.x++;
+                player.y--;
+                break;
+            }
+        case 'x':/*Baixo*/
+            {
+                player.x++;
+                break;
+            }
+        case 'c':/*Baixo e Direita (Diagonal)*/
+            {
+                player.x++;
+                player.y++;
+                break;
+            }
+        case 't':/*teleporte aleatorio*/
+            {
+                player.x=rand()%MAXLINS;
+                player.y=rand()%MAXCOLS;
+                break;
+            }
+        case 's':
+            {
+                printf("\nFicou parado\n");
+                __fpurge(stdin);
+                getchar();
+                break;
+            }
+        case 'g':/*teleporte em segurança*/
+            {
+                if(energy==1)
                 {
-                    if(o==0)
-                    {
-                        map[i][j]='O';
-                        o=1;
-                    }
-                    else
-                    {
-                        map[i][j]='o';
-                        o=0;
-                    }
-                           
+                    energy=0;
+                    printf("\nEscolha uma linha: ");
+                    scanf("%d", &player.x);
+                    printf("Escolha uma coluna: ");
+                    scanf("%d", &player.y);
+                    player.x--;
+                    player.y--;
                 }
-                /*else if(i==robots.x && j==robots.y)
-                {
-                    map[i][j]='r';
-                }
-                else if(i==fast_robots.x && j==fast_robots.y)
-                {
-                    map[i][j]='R';
-                }*/
                 else
-                    map[i][j]='.';
-                    
+                    printf("\nVoce nao possui energia\n");
+                __fpurge(stdin);
+                getchar();
+                break;
             }
-            
-        }
-        /*system("clear");*/
-        for(i=0;i<MAXLINS;i++)
-        {
-            printf("\t\t\t\t\t");
-            for(j=0;j<MAXCOLS;j++)
+        case 'h':/*manual do jogo*/
             {
-                printf("%c ", map[i][j]);
+                help();
+                __fpurge(stdin);
+                getchar();
+                break;
             }
-            printf("\n");
-        }
-        printf("\nJoystick:\t\t\tEnergia: %d\n\t\tq w e\n\t\ta . d\n\t\tz x c\n", energy);
-        printf("\ns->ficar parado");
-        printf("\nt->teletransporte aleatorio\n");
-        printf("g->teletransporte seguro\n");
-        printf("h->ajuda\n");
-        printf("Comando: ");
+        default:
+            {
+                printf("\nComando Invalido\n");
+                __fpurge(stdin);
+                getchar();
+                break;
+            }
+    }
+    if(player.x<0)
+        player.x=0;
+    if(player.x>15)
+        player.x=15;
+    if(player.y<0)
+        player.y=0;
+    if(player.y>15)
+        player.y=15;
 
+}
+
+void print_map() /*In progress*/
+{
+    system("clear");
+    int i,j;
+    for(i=0;i<MAXLINS;i++)
+    {
+        for(j=0;j<MAXCOLS;j++)
+        {
+
+            if(i==player.x && j==player.y)
+            {
+                if(o==0)
+                {
+                    map[i][j]='O';
+                    o=1;
+                }
+                else
+                {
+                    map[i][j]='o';
+                    o=0;
+                }
+
+            }
+            /*else if(i==robots[i].x && j==robots[i].y)
+            {
+                map[i][j]='r';
+            }
+            else if(i==fast_robots.x && j==fast_robots.y)
+              {
+              map[i][j]='R';
+              }*/
+
+            else
+                map[i][j]='.';
+
+        }
+
+    }
+    /*system("clear");*/
+    for(i=0;i<MAXLINS;i++)
+    {
+        printf("\t\t\t\t\t");
+        for(j=0;j<MAXCOLS;j++)
+        {
+            printf("%c ", map[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\nJoystick:\t\t\tEnergia: %d\n\t\tq w e\n\t\ta . d\n\t\tz x c\n", energy);
+    printf("\ns->ficar parado");
+    printf("\nt->teletransporte aleatorio\n");
+    printf("g->teletransporte seguro\n");
+    printf("h->ajuda\n");
+    printf("Comando: ");
+
+
+}
+
+int main()
+{   
+    srand(time(NULL));
+
+    //struct gamer robots[value_r];//registro do robo lento*/
+    /* struct gamer fast_robots[value_fr];//registro do robo rapido*/
+    player.x=rand()%MAXLINS;
+    player.y=rand()%MAXCOLS; /*inicializa o player numa posição qualquer*/
+    do
+    {
         
-    }
-
-    int main()
-    {   
-        srand(time(NULL));
-       /* struct gamer robots[value_r];//registro do robo lento*/
-       /* struct gamer fast_robots[value_fr];//registro do robo rapido*/
-
-        player.x=rand()%MAXLINS;
-        player.y=rand()%MAXCOLS; /*inicializa o player numa posição qualquer*/
-        do
+        energy=1;
+        do /*loop onde vai rodar o programa principal*/
         {
-            energy=1;
-            do /*loop onde vai rodar o programa principal*/
-            {
-                print_map();
-                move();
-            }while(loose!=1);
-        }while(quit!=1);
-    }
+            print_map();
+            move();
+        }while(loose!=1);
+    }while(quit!=1);
+}
 

@@ -153,50 +153,55 @@ void print_map(int eni) /*In progress*/
         for(j=0;j<MAXCOLS;j++)
         {
 
-            
-                for(n=0;n<(eni/2);n++)
-                {
-                    if(i==player.x && j==player.y && player.x)
-                    {
-                        if(o==0)
-                        {
-                            map[i][j]='O';
 
-                            o=1;
-                        }
-                        else
-                        {
-                            map[i][j]='o';
-                            o=0;
-                        }
-                        break;                
-                    }
-                    else  if(i==robot_slow[n].x && j==robot_slow[n].y && robot_slow[n].alive==1)
+            for(n=0;n<(eni/2);n++)
+            {
+                if(i==player.x && j==player.y)
+                {
+                    if(o==0)
                     {
-                        map[i][j]='r';
-                        break; 
-                    }
-                    else if(i==robot_fast[n].x  && j==robot_fast[n].y && robot_fast[n].alive==1)
-                    {
-                        map[i][j]='R';
-                        break;
-                    }
-                    else if(i==robot_slow[n].x && j==robot_slow[n].y && robot_slow[n].alive==0)
-                    {
-                        map[i][j]='L';
-        
-                    }
-                    else if(player.x==robot_slow[n].x && player.y==robot_slow[n].y && robot_slow[n].alive==1)
-                    {
-                        map[i][j]='X';
-        
+                        map[i][j]='O';
+
+                        o=1;
                     }
                     else
-                        map[i][j]='.';
-                        
+                    {
+                        map[i][j]='o';
+                        o=0;
+                    }
+                    break;                
+                }
+                else  if(i==robot_slow[n].x && j==robot_slow[n].y && robot_slow[n].alive==1)
+                {
+                    map[i][j]='r';
+                    break; 
+                }
+                else if(i==robot_fast[n].x  && j==robot_fast[n].y && robot_fast[n].alive==1)
+                {
+                    map[i][j]='R';
+                    break;
+                }
+                else if(i==robot_slow[n].x && j==robot_slow[n].y && robot_slow[n].alive==0)
+                {
+                    map[i][j]='L';
+
+                }
+                else if(i==robot_fast[n].x && j==robot_fast[n].y && robot_fast[n].alive==0)
+                    map[i][j]='L';
+                else if(player.x==robot_slow[n].x && player.y==robot_slow[n].y && robot_slow[n].alive==1)
+                {
+                    map[i][j]='X';
+
+                }
+                else
+                {
+                    map[i][j]='.';
+                    
                 }
 
-            
+            }
+
+
 
         }
     }
@@ -264,7 +269,7 @@ int main()
         win=q;
         for(f=0;f<q/2;f++)
         {
-            
+
             robot_slow[f].x=rand()%MAXLINS;
             robot_slow[f].y=rand()%MAXCOLS;
             robot_slow[f].alive=1;
@@ -278,7 +283,7 @@ int main()
             print_map(q);
             move();
             move_enemies(q);
-            
+
             for(f=0;f<(q/2);f++)
             {
                 if(robot_slow[f].x==player.x && robot_slow[f].y==player.y && robot_slow[f].alive==1)
@@ -305,7 +310,7 @@ int main()
                 temp_life+=robot_slow[f].alive+robot_fast[f].alive;
 
             }
-            
+
         }while(temp_life!=0 && loose!=1);
         print_map(q);
         if(loose==1)

@@ -45,7 +45,7 @@ void move()/*in Progress*/
     {
         case 'q':/*Cima e esquerda (Diagonal)*/
             {
-                if(map[(player.x-1)][(player.y-1)]!='L')
+                if(map[(player.x-1)][(player.y-1)]!='@' && map[(player.x-1)][(player.y-1)]!='+')
                 {
                     player.x--;
                     player.y--;
@@ -62,7 +62,7 @@ void move()/*in Progress*/
             }
         case 'w':/*Cima*/
             {
-                if(map[(player.x-1)][(player.y)]!='L')
+                if(map[(player.x-1)][(player.y)]!='@' && map[(player.x-1)][(player.y)]!='+')
                 {
                     player.x--;
                     enable_mv=1;
@@ -77,7 +77,7 @@ void move()/*in Progress*/
             }
         case 'e':/*Cima e direita (Diagonal)*/
             {
-                if(map[(player.x-1)][(player.y+1)]!='L')
+                if(map[(player.x-1)][(player.y+1)]!='@' && map[(player.x-1)][(player.y+1)]!='+')
                 {
                     player.x--;
                     player.y++;
@@ -93,7 +93,7 @@ void move()/*in Progress*/
             }
         case 'a':/*esquerda*/
             {
-                if(map[(player.x)][(player.y-1)]!='L')
+                if(map[(player.x)][(player.y-1)]!='@' && map[(player.x)][(player.y-1)]!='+')
                 {
                     player.y--;
                     enable_mv=1;
@@ -109,7 +109,7 @@ void move()/*in Progress*/
             }
         case 'd':/*direita*/
             {
-                if(map[(player.x)][(player.y+1)]!='L')
+                if(map[(player.x)][(player.y+1)]!='@' && map[(player.x)][(player.y+1)]!='+' )
                 {
                     player.y++;
                     enable_mv=1;
@@ -124,7 +124,7 @@ void move()/*in Progress*/
             }
         case 'z':/*Baixo e Esquerda (diagonal)*/
             {
-                if(map[(player.x+1)][(player.y-1)]!='L')
+                if(map[(player.x+1)][(player.y-1)]!='@' &&  map[(player.x+1)][(player.y-1)]!='+')
                 {
                     player.x++;
                     player.y--;
@@ -140,7 +140,7 @@ void move()/*in Progress*/
             }
         case 'x':/*Baixo*/
             {
-                if(map[(player.x+1)][(player.y)]!='L')
+                if(map[(player.x+1)][(player.y)]!='@' && map[(player.x+1)][(player.y)]!='+')
                 {
                     player.x++;
                     enable_mv=1;
@@ -155,7 +155,7 @@ void move()/*in Progress*/
             }
         case 'c':/*Baixo e Direita (Diagonal)*/
             {   
-                if(map[(player.x+1)][(player.y+1)]!='L')
+                if(map[(player.x+1)][(player.y+1)]!='@' && map[(player.x+1)][(player.y+1)]!='+')
                 {
                     player.x++;
                     player.y++;
@@ -184,8 +184,8 @@ void move()/*in Progress*/
                 getchar();
                 break;
             }
-        case 'g':/*teleporte em segurança*/
-            {
+        /*case 'g':/*teleporte em segurança*/
+           /* {
                 if(energy>0)
                 {
                     energy=0;
@@ -202,7 +202,7 @@ void move()/*in Progress*/
                 __fpurge(stdin);
                 getchar();
                 break;
-            }
+            }*/
         case 'h':/*manual do jogo*/
             {
                 help();
@@ -259,24 +259,24 @@ void print_map(int eni) /*In progress*/
                 }
                 else  if(i==robot_slow[n].x && j==robot_slow[n].y && robot_slow[n].alive==1)
                 {
-                    map[i][j]='r';
+                    map[i][j]='+';
                     break; 
                 }
                 else if(i==robot_fast[n].x  && j==robot_fast[n].y && robot_fast[n].alive==1)
                 {
-                    map[i][j]='R';
+                    map[i][j]='@';
                     break;
                 }
                 else if(i==robot_slow[n].x && j==robot_slow[n].y && robot_slow[n].alive==0)
                 {
-                    map[i][j]='L';
+                    map[i][j]='*';
                     break;
                 }
-                else if(i==robot_fast[n].x && j==robot_fast[n].y && robot_fast[n].alive==0)
+                /*else if(i==robot_fast[n].x && j==robot_fast[n].y && robot_fast[n].alive==0)
                 {
-                    map[i][j]='L';
+                    map[i][j]='*';
                     break;
-                }
+                }*/
                 else if(player.x==robot_slow[n].x && player.y==robot_slow[n].y && robot_slow[n].alive==1)
                     map[i][j]='X';
                 else if(player.x==robot_fast[n].x && player.y==robot_fast[n].y && robot_fast[n].alive==1)
@@ -309,7 +309,7 @@ void print_map(int eni) /*In progress*/
             printf("%d",i+1);
     }
     printf("\n\n");
-    printf("\nJoystick:\t\t\tEnergia: %d\t\t\t\tLevel: %d\t\t\tScore: %d\n\t\tq w e\n\t\ta . d\n\t\tz x c\n", energy, lvl, score);
+    printf("\nJoystick:\t\t\t\tLevel: %d\t\t\tScore: %d\n\t\tq w e\n\t\ta . d\n\t\tz x c\n", lvl, score);
     printf("\ns->ficar parado");
     printf("\nt->teletransporte aleatorio\n");
     printf("g->teletransporte seguro\n");
@@ -338,10 +338,10 @@ void move_enemies(int mv_eni)
                     robot_slow[a].y--;
             }
             int b;
-            for(b=0;b<2;b++)
+            /*for(b=0;b<2;b++)
             {
-                if(robot_fast[a].alive==1)
-                {
+               *if(robot_fast[a].alive==1)
+                  {
                     if(player.x>robot_fast[a].x)
                         robot_fast[a].x++;
                     else if(player.x<robot_fast[a].x)
@@ -363,10 +363,10 @@ void move_enemies(int mv_eni)
                         if(robot_slow[b].x==robot_fast[teste].x && robot_slow[b].y==robot_fast[teste].y)
                         {
                             robot_slow[b].alive=0;
-                            robot_fast[teste].alive=0;
+                            //robot_fast[teste].alive=0;
 
                         }
-                        if(robot_fast[b].x==robot_fast[teste].x && robot_fast[b].y==robot_fast[teste].y && b!=teste)
+                       if(robot_fast[b].x==robot_fast[teste].x && robot_fast[b].y==robot_fast[teste].y && b!=teste)
                         {
                             robot_fast[b].alive=0;
                             robot_fast[teste].alive=0;
@@ -377,7 +377,7 @@ void move_enemies(int mv_eni)
 
 
                 }
-            }
+            }*/
         }
     }
 
@@ -390,7 +390,7 @@ int main()
     int temp_score=0, first_kill=1;
 
 
-    energy=0;
+   // energy=0;
     /* struct gamer fast_robots[value_fr];//registro do robo rapido*/
     player.x=rand()%MAXLINS;
     player.y=rand()%MAXCOLS; /*inicializa o player numa posição qualquer*/
@@ -403,7 +403,7 @@ int main()
             loose=0;
         }
         q+=2;
-        energy++;
+        //energy++;
         int f;
         win=q;
         for(f=0;f<q/2;f++)
@@ -412,9 +412,9 @@ int main()
             robot_slow[f].x=rand()%MAXLINS;
             robot_slow[f].y=rand()%MAXCOLS;
             robot_slow[f].alive=1;
-            robot_fast[f].x=rand()%MAXLINS;
-            robot_fast[f].y=rand()%MAXCOLS;
-            robot_fast[f].alive=1;
+            robot_fast[0].x=rand()%MAXLINS;
+            robot_fast[0].y=rand()%MAXCOLS;
+            robot_fast[0].alive=1;
         }
         do /*loop onde vai rodar o programa principal*/
         {   
@@ -453,7 +453,7 @@ int main()
                     }
 
                 }
-                temp_life+=robot_slow[f].alive+robot_fast[f].alive;
+                temp_life+=robot_slow[f].alive;
 
             }
 
@@ -468,7 +468,7 @@ int main()
             temp_score=temp_life;
 
 
-        }while(temp_life!=0 && loose!=1);
+        }while(temp_life!=0 && loose!=1 && lvl<6);
         print_map(q);
         if(loose==1)
         {
@@ -484,8 +484,12 @@ int main()
             lvl++;
             first_kill=1;
         }
+        if(lvl==6)
+        {
+            printf("\n O jogo terminou, voce passou do ultimo lvl, parabens!\n");
+        }
         __fpurge(stdin);
         getchar();
-    }while(quit!=1);
+    }while(quit!=1 && lvl<6);
 }
 

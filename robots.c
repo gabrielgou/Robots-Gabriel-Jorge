@@ -282,7 +282,7 @@ void print_map(int eni) /*In progress*/
                 else if(player.x==robot_fast[n].x && player.y==robot_fast[n].y && robot_fast[n].alive==1)
                     map[i][j]='X';
                 else
-                    map[i][j]='.';
+                    map[i][j]=' ';
 
             }
 
@@ -291,29 +291,36 @@ void print_map(int eni) /*In progress*/
         }
     }
     /*system("clear");*/
+    printf("\t\t\t\t\t");
+    for(i=0;i<(2*MAXCOLS+2);i++)
+    {
+        printf("-");
+    }
+    printf("\n");
     for(i=0;i<MAXLINS;i++)
     {
-        printf("\t\t\t\t\t%02d ",i+1);
+        printf("\t\t\t\t\t");
+        printf("|");
         for(j=0;j<MAXCOLS;j++)
         {
             printf("%c ", map[i][j]);
         }
+        printf("|");
         printf("\n");
     }
-    printf("\t\t\t\t\t   ");
-    for(i=0;i<MAXCOLS;i++)
+    printf("\t\t\t\t\t");
+    for(i=0;i<(2*MAXCOLS+2);i++)
     {
-        if(i<9)
-            printf("%d ", i+1);
-        else
-            printf("%d",i+1);
+        printf("-");
     }
+
+    
     printf("\n\n");
     printf("\nJoystick:\t\t\t\tLevel: %d\t\t\tScore: %d\n\t\tq w e\n\t\ta . d\n\t\tz x c\n", lvl, score);
     printf("\ns->ficar parado");
     printf("\nt->teletransporte aleatorio\n");
-    printf("g->teletransporte seguro\n");
-    printf("h->ajuda\n");
+    //printf("g->teletransporte seguro\n");
+    //printf("h->ajuda\n");
     printf("Comando: ");
 }
 

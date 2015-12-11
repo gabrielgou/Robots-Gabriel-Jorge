@@ -1,17 +1,39 @@
 /*Progama: Robots.c(ex27);
 Funcao: Rodar o jogo Robots;
 Autores: Jorge Edson Ribeiro da Silva Neto & Joao Gabriel Gouveia de Souza Brito;
-Contatos: jorge.ed.ribeiro00@gmail.com & gabriel.gouveia@live.com;*/
+Contatos: jorge.ed.ribeiro00@gmail.com & gabriel.gouveia@live.com;
+Compile com:
+    $gcc -o robots.x robots.c -std=c99 -lm
+    */
+
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+#include <locale.h>
+#include <wchar.h>
 
 
 /*===============Defines========================*/
-#define MAXLINS 16
+#define MAXLINS 10
 #define MAXCOLS 16
+/* Bordas UTF 8 */
+ 
+#define WUL L'\u2518' /* ^VU2518 ┘ */  
+#define WDL L'\u2510' /* ^VU2510 ┐ */  
+#define WDR L'\u250c' /* ^VU250c ┌ */  
+#define WUR L'\u2514' /* ^VU2514 └ */  
+#define WVH L'\u253c' /* ^VU253c ┼ */
+#define WHH L'\u2500' /* ^VU2500 ─ */  
+#define WVR L'\u251c' /* ^VU251c ├ */
+#define WVL L'\u2524' /* ^VU2524 ┤ */
+#define WUH L'\u2534' /* ^VU2534 ┴ */
+#define WDF L'\u252c' /* ^VU252c ┬ */
+#define WVV L'\u2502' /* ^VU2502 │ */
+#define WGL L'\u2571' /* ^VU2571 ╱ */
+#define WGR L'\u2572' /* ^VU2572 ╲ */
+#define WGX L'\u2573' /* ^VU2573 ╳ */
 
 /*===============variaveis globais===============*/
 char joy;
@@ -79,7 +101,7 @@ void move()/*in Progress*/
             }
         case 'e':/*Cima e direita (Diagonal)*/
             {
-                if(map[(player.x-1)][(player.y+1)]!='@' && map[(player.x-1)][(player.y+1)]!='+' && player.x>0 && player.y<15)
+                if(map[(player.x-1)][(player.y+1)]!='@' && map[(player.x-1)][(player.y+1)]!='+' && player.x>0 && player.y<(MAXCOLS-1))
                 {
                     player.x--;
                     player.y++;
@@ -113,7 +135,7 @@ void move()/*in Progress*/
             }
         case 'd':/*direita*/
             {
-                if(map[(player.x)][(player.y+1)]!='@' && map[(player.x)][(player.y+1)]!='+' && player.y<15)
+                if(map[(player.x)][(player.y+1)]!='@' && map[(player.x)][(player.y+1)]!='+' && player.y<(MAXCOLS-1))
                 {
                     player.y++;
                     enable_mv=1;
@@ -129,7 +151,7 @@ void move()/*in Progress*/
             }
         case 'z':/*Baixo e Esquerda (diagonal)*/
             {
-                if(map[(player.x+1)][(player.y-1)]!='@' &&  map[(player.x+1)][(player.y-1)]!='+' && player.x<15 && player.y>0)
+                if(map[(player.x+1)][(player.y-1)]!='@' &&  map[(player.x+1)][(player.y-1)]!='+' && player.x<(MAXLINS-1) && player.y>0)
                 {
                     player.x++;
                     player.y--;
@@ -146,7 +168,7 @@ void move()/*in Progress*/
             }
         case 'x':/*Baixo*/
             {
-                if(map[(player.x+1)][(player.y)]!='@' && map[(player.x+1)][(player.y)]!='+' && player.x<15)
+                if(map[(player.x+1)][(player.y)]!='@' && map[(player.x+1)][(player.y)]!='+' && player.x<(MAXLINS-1))
                 {
                     player.x++;
                     enable_mv=1;
@@ -162,7 +184,7 @@ void move()/*in Progress*/
             }
         case 'c':/*Baixo e Direita (Diagonal)*/
             {   
-                if(map[(player.x+1)][(player.y+1)]!='@' && map[(player.x+1)][(player.y+1)]!='+' && player.x<15 && player.y<15)
+                if(map[(player.x+1)][(player.y+1)]!='@' && map[(player.x+1)][(player.y+1)]!='+' && player.x<(MAXLINS-1) && player.y<(MAXCOLS-1))
                 {
                     player.x++;
                     player.y++;
@@ -301,27 +323,42 @@ void print_map(int eni) /*In progress*/
     }
     /*system("clear");*/
     printf("\t\t\t\t\t");
-    for(i=0;i<(2*MAXCOLS+2);i++)
+    printf("%lc",WDR);
+    for(i=0;i<(MAXCOLS-1);i++)
     {
-        printf("-");
+        printf("%lc%lc", WHH,WDF);
     }
+    printf("%lc%lc",WHH,WDL);
     printf("\n");
     for(i=0;i<MAXLINS;i++)
     {
         printf("\t\t\t\t\t");
-        printf("|");
+        printf("%lc", WVV);
         for(j=0;j<MAXCOLS;j++)
         {
-            printf("%c ", map[i][j]);
+            printf("%c%lc", map[i][j],WVV);
         }
-        printf("|");
+        printf("\n");
+        int e;
+        printf("\t\t\t\t\t");
+        if(i<(MAXLINS-1))
+            printf("%lc", WVR);
+        else
+            printf("%lc",WUR);
+        for(e=0;e<(MAXCOLS-1);e++)
+        {
+            if(i<(MAXLINS-1))
+                printf("%lc%lc", WHH, WVH);
+            else
+                printf("%lc%lc",WHH, WUH);
+        }
+        if(i<(MAXLINS-1))
+            printf("%lc%lc", WHH,WVL);
+        else
+            printf("%lc%lc", WHH,WUL);
         printf("\n");
     }
-    printf("\t\t\t\t\t");
-    for(i=0;i<(2*MAXCOLS+2);i++)
-    {
-        printf("-");
-    }
+    
 
 
     printf("\n\n");
@@ -403,6 +440,7 @@ void move_enemies(int mv_eni)
 int main()
 {   
     srand(time(NULL));
+    setlocale(LC_ALL, ""); /* para caracteres UTF-8 */
     int temp_score=0, first_kill=1;
 
 
